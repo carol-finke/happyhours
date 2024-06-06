@@ -1,0 +1,57 @@
+<h1>Happy Hours in Chicago</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Neighborhood</th>
+      <th>Link</th>
+      <th>Deal</th>
+      <th>Monday</th>
+      <th>Tuesday</th>
+      <th>Wednesday</th>
+      <th>Thursday</th>
+      <th>Friday</th>
+      <th>Saturday</th>
+      <th>Sunday</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @restaurants.each do |restaurant| %>
+    <tr>
+      <td><%= restaurant.name %></td>
+      <td><%= restaurant.address %></td>
+      <td><%= restaurant.neighborhood %></td>
+      <td><a href="<%= restaurant.link %>">Link</a></td>
+      <td><%= restaurant.deal %></td>
+      <td><%= restaurant.monday %></td>
+      <td><%= restaurant.tuesday %></td>
+      <td><%= restaurant.wednesday %></td>
+      <td><%= restaurant.thursday %></td>
+      <td><%= restaurant.friday %></td>
+      <td><%= restaurant.saturday %></td>
+      <td><%= restaurant.sunday %></td>
+      <td><%= restaurant.price %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+<div id="map" style="height: 500px;"></div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const map = L.map('map').setView([41.8781, -87.6298], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    const restaurants = <%= raw @restaurants.to_json %>;
+    restaurants.forEach(restaurant => {
+      if (restaurant.latitude && restaurant.longitude) {
+        L.marker([restaurant.latitude, restaurant.longitude]).addTo(map)
+          .bindPopup(`<b>${restaurant.name}</b><br>${restaurant.address}`);
+      }
+    });
+  });
+</script>

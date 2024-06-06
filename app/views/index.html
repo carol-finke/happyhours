@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Hours in Chicago</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+    <h1>Happy Hours in Chicago</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="file" id="file-input">
+        <button type="submit">Upload</button>
+    </form>
+    <table id="restaurants-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Neighborhood</th>
+                <th>Link</th>
+                <th>Deal</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div id="map" style="height: 500px;"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData();
+            formData.append('file', document.getElementById('file-input').files[0]);
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                  loadRestaurants();
+              });
+        });
+
+        function loadRestaurants() {
+            fetch('/restaurants')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.querySelector('#restaurants-table tbody');
+                    tbody.innerHTML = '';
+                    data.forEach(restaurant => {
+                        const row = document.createElement('tr');
+                        for (const prop in restaurant) {
+                            const cell = document.createElement('td');
+                            cell.textContent = restaurant[prop];
+                            row.appendChild(cell);
+                        }
+                        tbody.appendChild(row);
+                    });
+                    loadMap(data);
+                });
+        }
+
+        function loadMap(restaurants) {
+            const map = L.map('map').setView([41.8781, -87.6298], 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            restaurants.forEach(restaurant => {
+                const coords = restaurant.address.split(','); // Replace with actual lat/lng
+                L.marker([coords[0], coords[1]]).addTo(map)
+                    .bindPopup(`<b>${restaurant.name}</b><br>${restaurant.address}`);
+            });
+        }
+
+        loadRestaurants();
+    </script>
+</body>
+</html>

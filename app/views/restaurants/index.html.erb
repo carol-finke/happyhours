@@ -1,0 +1,39 @@
+<h1>Happy Hours in Chicago</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Neighborhood</th>
+      <th>Link</th>
+      <th>Deal</th>
+      <th>Monday</th>
+      <th>Tuesday</th>
+      <th>Wednesday</th>
+      <th>Thursday</th>
+      <th>Friday</th>
+      <th>Saturday</th>
+      <th>Sunday</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @restaurants.each do |restaurant| %>
+    <tr>
+      <td><%= restaurant.name %></td>
+      <td><%= restaurant.address %></td>
+      <td><%= restaurant.neighborhood %></td>
+      <td><%= link_to 'Website', restaurant.link %></td>
+      <td><%= restaurant.deal %></td>
+      <td><%= restaurant.monday %></td>
+      <td><%= restaurant.tuesday %></td>
+      <td><%= restaurant.wednesday %></td>
+      <td><%= restaurant.thursday %></td>
+      <td><%= restaurant.friday %></td>
+      <td><%= restaurant.saturday %></td>
+      <td><%= restaurant.sunday %></td>
+      <td><%= restaurant.price %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

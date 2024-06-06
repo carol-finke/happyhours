@@ -1,13 +1,7 @@
 Rails.application.routes.draw do
-  resources "likes"
-  resources "posts"
-  resources "sessions"
-  resources "users"
-
-  # Login/logout
-  get("/login", { :controller => "sessions", :action => "new" })
-  get("/logout", { :controller => "sessions", :action => "destroy" })
-
-  # Define the root route
-  get("/", { :controller => "posts", :action => "index" })
+  root 'pages#home'
+  get 'happy_hours', to: 'pages#happy_hours'
+  get 'patios', to: 'pages#patios'
+  get 'rooftops', to: 'pages#rooftops'
+  resources :restaurants, only: [:index, :show]
 end
