@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
   def home
+    @restaurants = Restaurant.distinct
   end
 
   def happy_hours
@@ -26,13 +27,5 @@ class PagesController < ApplicationController
     end
 
     Rails.logger.debug("Loaded #{@restaurants.count} restaurants")
-  end
-
-  def patios
-    # Implement logic for patios if needed
-  end
-
-  def rooftops
-    # Implement logic for rooftops if needed
   end
 end
