@@ -21,5 +21,7 @@ class RestaurantsController < ApplicationController
         @restaurants = @restaurants.order(:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday)
       end
     end
+
+    Rails.logger.debug("Loaded #{@restaurants.count} restaurants")
   end
 end

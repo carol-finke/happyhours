@@ -3,14 +3,36 @@ class PagesController < ApplicationController
   end
 
   def happy_hours
-    @restaurants = Restaurant.where(restaurant_type: 'happy_hour')
+    @restaurants = Restaurant.distinct
+
+    if params[:neighborhoods].present?
+      @restaurants = @restaurants.where(neighborhood: params[:neighborhoods])
+    end
+
+    if params[:days].present?
+      day_conditions = params[:days].map { |day| "#{day} IS NOT NULL AND #{day} != ''" }.join(' OR ')
+      @restaurants = @restaurants.where(day_conditions)
+    end
+
+    if params[:sort].present?
+      case params[:sort]
+      when 'neighborhood'
+        @restaurants = @restaurants.order(:neighborhood)
+      when 'price'
+        @restaurants = @restaurants.order(:price)
+      when 'day'
+        @restaurants = @restaurants.order(:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday)
+      end
+    end
+
+    Rails.logger.debug("Loaded #{@restaurants.count} restaurants")
   end
 
   def patios
-    @restaurants = Restaurant.where(restaurant_type: 'patio')
+    # Implement logic for patios if needed
   end
 
   def rooftops
-    @restaurants = Restaurant.where(restaurant_type: 'rooftop')
+    # Implement logic for rooftops if needed
   end
 end
