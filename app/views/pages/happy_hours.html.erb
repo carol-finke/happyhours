@@ -1,7 +1,13 @@
 <div class="container mt-3">
+  <% if flash["notice"] != nil %>
+    <div class="alert alert-primary">
+      <%= flash["notice"] %>
+    </div>
+  <% end %>
+
   <div class="filter-section mb-4">
     <form method="get" action="/happy_hours">
-      <div class="filter-container" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: -50px;">
+      <div class="filter-container" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px;">
         <div>
           <select id="neighborhoods" name="neighborhoods[]" multiple="multiple" class="form-select filter-dropdown" style="width: 200px;">
             <option disabled>Neighborhoods</option>
@@ -60,41 +66,96 @@
     <% end %>
   </div>
 
-  <div class="main-content">
-    <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; width: 100%;">
-      <% if @restaurants.present? %>
-        <% @restaurants.each do |restaurant| %>
-          <div class="card" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden; margin-bottom: 20px; width: 100%; transition: transform 0.2s;">
-            <img src="https://source.unsplash.com/random/300x200/?restaurant,bar,food" alt="Restaurant Image" style="width: 100%; height: 200px; object-fit: cover;">
-            <div class="card-body" style="padding: 15px;">
-              <h5 class="card-title" style="font-size: 1.25rem; margin-bottom: 10px;"><%= restaurant.name %></h5>
-              <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Address:</strong> <%= restaurant.address %></p>
-              <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Deal:</strong> <%= restaurant.deal %></p>
-              <% if params[:days].present? %>
-                <% params[:days].each do |day| %>
-                  <% if restaurant[day].present? %>
-                    <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong><%= day.capitalize %>:</strong> <%= restaurant[day] %></p>
+  <div class="main-content" style="display: flex;">
+    <div class="content" style="flex: 1; margin-right: 20px;">
+      <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; width: 100%;">
+        <% if @restaurants.present? %>
+          <% @restaurants.each do |restaurant| %>
+            <div class="card" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden; margin-bottom: 20px; width: 100%; transition: transform 0.2s;">
+              <img src="https://source.unsplash.com/random/300x200/?restaurant,bar,food" alt="Restaurant Image" style="width: 100%; height: 200px; object-fit: cover;">
+              <div class="card-body" style="padding: 15px;">
+                <h5 class="card-title" style="font-size: 1.25rem; margin-bottom: 10px;"><%= restaurant.name %></h5>
+                <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Address:</strong> <%= restaurant.address %></p>
+                <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Deal:</strong> <%= restaurant.deal %></p>
+                <% if params[:days].present? %>
+                  <% params[:days].each do |day| %>
+                    <% if restaurant[day].present? %>
+                      <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong><%= day.capitalize %>:</strong> <%= restaurant[day] %></p>
+                    <% end %>
                   <% end %>
+                <% else %>
+                  <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Monday:</strong> <%= restaurant.monday %></p>
+                  <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Tuesday:</strong> <%= restaurant.tuesday %></p>
+                  <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Wednesday:</strong> <%= restaurant.wednesday %></p>
+                  <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Thursday:</strong> <%= restaurant.thursday %></p>
+                  <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Friday:</strong> <%= restaurant.friday %></p>
+                  <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Saturday:</strong> <%= restaurant.saturday %></p>
+                  <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Sunday:</strong> <%= restaurant.sunday %></p>
                 <% end %>
-              <% else %>
-                <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Monday:</strong> <%= restaurant.monday %></p>
-                <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Tuesday:</strong> <%= restaurant.tuesday %></p>
-                <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Wednesday:</strong> <%= restaurant.wednesday %></p>
-                <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Thursday:</strong> <%= restaurant.thursday %></p>
-                <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Friday:</strong> <%= restaurant.friday %></p>
-                <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Saturday:</strong> <%= restaurant.saturday %></p>
-                <p class="card-text" style="margin-bottom: 10px; color: #555;"><strong>Sunday:</strong> <%= restaurant.sunday %></p>
-              <% end %>
-              <a href="<%= restaurant.link %>" class="btn btn-primary btn-sm">Visit Website</a>
-              <a href="#" class="btn btn-secondary btn-sm get-directions" data-lat="<%= restaurant.latitude %>" data-lng="<%= restaurant.longitude %>">Get Directions</a>
+                <a href="<%= restaurant.link %>" class="btn btn-primary btn-sm">Visit Website</a>
+                <a href="#" class="btn btn-secondary btn-sm get-directions" data-lat="<%= restaurant.latitude %>" data-lng="<%= restaurant.longitude %>">Get Directions</a>
+              </div>
             </div>
-          </div>
+          <% end %>
+        <% else %>
+          <p>No restaurants found.</p>
         <% end %>
-      <% else %>
-        <p>No restaurants found.</p>
-      <% end %>
+      </div>
     </div>
+    <div id="map" style="width: 400px; height: 100vh; position: sticky; top: 0;"></div>
   </div>
 </div>
 
-<div id="map" style="width: 100%; height: 400px; margin-top: 20px;"></div>
+<footer style="background: #f8f9fa; padding: 20px; text-align: center;">
+  <p>&copy; <%= Time.now.year %> Happy Hours Chicago. All rights reserved.</p>
+</footer>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const map = L.map('map').setView([41.8781, -87.6298], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    const restaurants = <%= raw @restaurants.to_json %>;
+    console.log(restaurants); // Debug output
+    restaurants.forEach(restaurant => {
+      if (restaurant.latitude && restaurant.longitude) {
+        L.marker([restaurant.latitude, restaurant.longitude]).addTo(map)
+          .bindPopup(`<b>${restaurant.name}</b><br>${restaurant.address}`);
+      }
+    });
+
+    $('#neighborhoods, #days').select2({
+      placeholder: 'Select an option',
+      allowClear: true
+    });
+
+    document.getElementById('clear-neighborhoods').addEventListener('click', function() {
+      $('#neighborhoods').val(null).trigger('change');
+    });
+
+    document.getElementById('clear-days').addEventListener('click', function() {
+      $('#days').val(null).trigger('change');
+    });
+
+    $('.get-directions').on('click', function(e) {
+      e.preventDefault();
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          const { latitude, longitude } = position.coords;
+          const destLat = $(this).data('lat');
+          const destLng = $(this).data('lng');
+          window.open(`https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${destLat},${destLng}`, '_blank');
+        });
+      } else {
+        alert('Geolocation is not supported by this browser.');
+      }
+    });
+  });
+</script>
