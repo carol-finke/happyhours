@@ -1,5 +1,5 @@
 class RestaurantsController < ApplicationController
-  def happy_hours
+  def index
     @restaurants = Restaurant.all
 
     if params[:neighborhoods].present?
@@ -7,21 +7,20 @@ class RestaurantsController < ApplicationController
     end
 
     if params[:days].present?
-      day_conditions = params[:days].map { |day| "#{day} IS NOT NULL AND #{day} != ''" }.join(' OR ')
-      @restaurants = @restaurants.where(day_conditions)
+      @restaurants = @restaurants.select { |restaurant| params[:days].any? { |day| restaurant.send(day).present? } }
     end
 
-    if params[:sort].present?
-      case params[:sort]
-      when 'neighborhood'
-        @restaurants = @restaurants.order(:neighborhood)
-      when 'price'
-        @restaurants = @restaurants.order(:price)
-      when 'day'
-        @restaurants = @restaurants.order(:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday)
+    if params[:time].present?
+      @restaurants = @restaurants.select do |restaurant|
+        params[:days].any? do |day|
+          happy_hour_time = restaurant.send(day)
+          next unless happy_hour_time
+
+          start_time, end_time = happy_hour_time.split('-').map { |t| Time.parse(t) }
+          filter_time = Time.parse(params[:time])
+          filter_time.between?(start_time, end_time)
+        end
       end
     end
-
-    Rails.logger.debug("Loaded #{@restaurants.count} restaurants")
   end
 end
