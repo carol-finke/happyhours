@@ -342,6 +342,11 @@
     <button><i class="fas fa-utensils"></i>Classic Establishment</button>
     <button><i class="fas fa-question-circle"></i>Trivia</button>
     <button><i class="fas fa-video"></i>Movie Location</button>
+    <button><i class="fas fa-dog"></i>Dog Friendly</button>
+    <button><i class="fas fa-theater-masks"></i>Live Entertainment</button>
+    <button><i class="fas fa-glass-cheers"></i>Speakeasy</button>
+    <button><i class="fas fa-popcorn"></i>Bottomless Popcorn</button>
+    <button><i class="fas fa-map-marker-alt"></i>Local</button>
     <button><i class="fas fa-filter"></i>Filters</button>
   </div>
 
@@ -419,6 +424,21 @@
                   <div class="btn-group">
                     <a href="<%= restaurant.link %>" class="btn btn-primary btn-sm btn-smaller">Visit Website</a>
                     <a href="#" class="btn btn-secondary btn-sm btn-smaller get-directions" data-lat="<%= restaurant.latitude %>" data-lng="<%= restaurant.longitude %>">Get Directions</a>
+                  </div>
+                  <!-- Tags Section -->
+                  <div class="tags mt-2">
+                    <% if restaurant.patios %> <span class="badge bg-info"><i class="fas fa-umbrella-beach"></i> Patios</span> <% end %>
+                    <% if restaurant.rooftops %> <span class="badge bg-info"><i class="fas fa-building"></i> Rooftops</span> <% end %>
+                    <% if restaurant.live_music %> <span class="badge bg-info"><i class="fas fa-music"></i> Live Music</span> <% end %>
+                    <% if restaurant.activities %> <span class="badge bg-info"><i class="fas fa-running"></i> Activities</span> <% end %>
+                    <% if restaurant.classic_establishment %> <span class="badge bg-info"><i class="fas fa-utensils"></i> Classic Establishment</span> <% end %>
+                    <% if restaurant.trivia %> <span class="badge bg-info"><i class="fas fa-question-circle"></i> Trivia</span> <% end %>
+                    <% if restaurant.movie_location %> <span class="badge bg-info"><i class="fas fa-video"></i> Movie Location</span> <% end %>
+                    <% if restaurant.dog_friendly %> <span class="badge bg-info"><i class="fas fa-dog"></i> Dog Friendly</span> <% end %>
+                    <% if restaurant.live_entertainment %> <span class="badge bg-info"><i class="fas fa-theater-masks"></i> Live Entertainment</span> <% end %>
+                    <% if restaurant.speakeasy %> <span class="badge bg-info"><i class="fas fa-glass-cheers"></i> Speakeasy</span> <% end %>
+                    <% if restaurant.bottomless_popcorn %> <span class="badge bg-info"><i class="fas fa-popcorn"></i> Bottomless Popcorn</span> <% end %>
+                    <% if restaurant.local %> <span class="badge bg-info"><i class="fas fa-map-marker-alt"></i> Local</span> <% end %>
                   </div>
                 </div>
               </div>
